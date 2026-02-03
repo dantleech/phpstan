@@ -25,7 +25,7 @@ jobs:
       checksum-result: ${{ steps.checksum-difference.outputs.result }}
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "phpstan/phpstan"
           ref: ${{ inputs.ref }}
@@ -157,7 +157,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "phpstan/phpstan"
           ref: ${{ inputs.ref }}
@@ -478,7 +478,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "phpstan/phpstan"
           ref: ${{ inputs.ref }}
@@ -502,7 +502,7 @@ jobs:
           attempt_delay: 1000
 
       - name: "Checkout project"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "${{ matrix.repo }}"
           ref: "${{ matrix.ref }}"
@@ -523,7 +523,7 @@ jobs:
         working-directory: ${{ matrix.phpstan-cwd || 'e2e/integration/repo' }}
         run: "${{ matrix.phpstan-command }} -b ../${{ matrix.baseline-file }}"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: baselines-${{ matrix.baseline-file }}
@@ -537,14 +537,14 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "phpstan/phpstan"
           ref: ${{ inputs.ref }}
           token: ${{ secrets.phpstan-bot-token }}
 
       - name: "Download baselines"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: baselines-*
           merge-multiple: true
@@ -552,7 +552,7 @@ jobs:
 
       - name: "Create Pull Request"
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.phpstan-bot-token }}
           branch: "create-pull-request/baselines-2.1.x"
@@ -572,7 +572,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "phpstan/phpstan"
           ref: ${{ inputs.ref }}
@@ -596,7 +596,7 @@ jobs:
           attempt_delay: 1000
 
       - name: "Checkout PMMP"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "pmmp/PocketMine-MP"
           ref: 5.37.3
@@ -616,7 +616,7 @@ jobs:
         working-directory: "e2e/integration/repo"
         run: ../../../phpstan.phar analyse -c ../pocketmine-ng.neon --memory-limit=2G -b ../pocketmine-ng-baseline.neon
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: pocketmine-ng-baseline.neon
